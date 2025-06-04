@@ -17,8 +17,8 @@ func Error(e error) {
 	}
 }
 
-func Repartition(AllDays []DayTable, _ float64) []DayTable {
-	const totalWork, step = 35.0, 0.5
+func Repartition(AllDays []DayTable, _ float64, totalWork float64) []DayTable {
+	const step = 0.5
 	n := len(AllDays)
 	available := make([]float64, n)
 	assigned := make([]float64, n)

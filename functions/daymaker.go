@@ -30,7 +30,7 @@ func MakeDay(file *os.File, scanner *bufio.Scanner) (DayTable, int) {
 	return CurrentDay, row
 }
 
-func CreateDays(file *os.File) []DayTable {
+func CreateDays(file *os.File, n float64) []DayTable {
 	scanner := bufio.NewScanner(file)
 	AllDays := make([]DayTable, 5)
 	row := 0
@@ -45,6 +45,6 @@ func CreateDays(file *os.File) []DayTable {
 	}
 
 	AllDays, TotalHours := AvailabilityCheck(AllDays)
-	AllDays = Repartition(AllDays, TotalHours)
+	AllDays = Repartition(AllDays, TotalHours, n)
 	return AllDays
 }
