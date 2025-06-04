@@ -44,7 +44,7 @@ func CreateDays(file *os.File, n float64) []DayTable {
 		AllDays[i].MaxHour = HoursToDecimal(AllDays[i].MaxHour)
 	}
 
-	AllDays, TotalHours := AvailabilityCheck(AllDays)
+	AllDays, TotalHours := AvailabilityCheck(AllDays, n)
 	AllDays = Repartition(AllDays, TotalHours, n)
 	return AllDays
 }

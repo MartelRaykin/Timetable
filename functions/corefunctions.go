@@ -28,7 +28,6 @@ func Repartition(AllDays []DayTable, _ float64, totalWork float64) []DayTable {
 		max, _ := strconv.ParseFloat(day.MaxHour, 64)
 		available[i] = float64(int((max-min)*2)) / 2
 	}
-
 	totalAssigned := 0.0
 	for totalAssigned < totalWork {
 		progress := false

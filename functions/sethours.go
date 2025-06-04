@@ -15,14 +15,14 @@ func HoursAvailable(AllDays []DayTable) []float64 {
 	return HoursPerDay
 }
 
-func AvailabilityCheck(AllDays []DayTable) ([]DayTable, float64) {
+func AvailabilityCheck(AllDays []DayTable, n float64) ([]DayTable, float64) {
 	HoursPerDay := HoursAvailable(AllDays)
 	TotalHours := 0.0
 	for i := 0; i < 5; i++ {
 		TotalHours += HoursPerDay[i]
 	}
 
-	if TotalHours < 35.0 {
+	if TotalHours < n {
 		AllDays = append(AllDays, DayTable{"Samedi", "10.00", "20.00"})
 		TotalHours += 10
 	}

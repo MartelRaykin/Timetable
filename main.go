@@ -10,6 +10,7 @@ import (
 
 func main() {
 	n := 35.0
+	hours := ""
 	if len(os.Args) == 1 {
 		thirtyfive.Default()
 		return
@@ -17,11 +18,13 @@ func main() {
 		var err error
 		n, err = strconv.ParseFloat(os.Args[2], 64)
 		thirtyfive.Error(err)
-	}
-
-	if len(os.Args) > 3 {
+		hours = thirtyfive.DecimalToHour(os.Args[2])
+		hours = strings.Replace(hours, ":", "h", 1)
+	} else if len(os.Args) > 3 {
 		fmt.Println("Program needs a file to run.")
 		return
+	} else {
+		hours = "35h"
 	}
 
 	// Ouverture du fichier
@@ -29,7 +32,7 @@ func main() {
 	thirtyfive.Error(err)
 	defer file.Close()
 
-	fmt.Printf("Temps de présence par jour pour atteindre %vh:\n", n)
+	fmt.Printf("Temps de présence par jour pour atteindre %v :\n", hours)
 	for _, day := range thirtyfive.CreateDays(file, n) {
 		hourStr := strings.TrimLeft(day.MinHour, "0")
 		if hourStr == "" || strings.HasPrefix(hourStr, "-") {
