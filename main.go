@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strconv"
 	thirtyfive "thirty-five/functions"
 )
 
@@ -14,8 +15,18 @@ func main() {
 	}
 
 	if filename == "" {
-		thirtyfive.Default()
-		return
+		fmt.Println("Aucune liste détectée. Créer une liste ? (Oui : Création manuelle de la liste / Non : Heures par défaut)")
+		input := ""
+		fmt.Scanln(&input)
+		if input == "n" || input == "no" || input == "non" {
+			thirtyfive.Default()
+			return
+		} else if input == "y" || input == "o" || input == "oui" || input == "yes" {
+			n, err = strconv.ParseFloat(thirtyfive.FirstDay(), 64)
+			thirtyfive.Error(err)
+			os.Args = append(os.Args, "timetable.txt")
+		}
+
 	}
 
 	// Ouverture du fichier

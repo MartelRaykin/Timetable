@@ -28,16 +28,14 @@ func AddMoreTime(TotalHours float64, n float64, AllDays []DayTable) ([]DayTable,
 	minHour := "10:00"
 	maxHour := "20:00"
 	x := n - TotalHours
-
-	fmt.Printf("Pas assez d'heures disponibles. Manque : %v heures\n\n", x)
+	weekdays := []string{"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"}
 
 	for i := 0; i < len(AllDays); i++ {
 		AllDays[i].Day = cases.Title(language.French, cases.Compact).String(AllDays[i].Day)
 	}
 
 	for len(AllDays) < 6 && TotalHours < n {
-		weekdays := []string{"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"}
-
+		fmt.Printf("Pas assez d'heures disponibles. Manque : %v heures\n\n", x)
 		existing := make(map[string]bool)
 		for _, day := range AllDays {
 			existing[day.Day] = true
@@ -74,20 +72,7 @@ func AddMoreTime(TotalHours float64, n float64, AllDays []DayTable) ([]DayTable,
 			}
 		}
 
-		input = ""
-		fmt.Println("Heure minimum d'arrivée (défault : 10:00)")
-		fmt.Scanln(&input)
-		if input != "" {
-			minHour = input
-		}
-
-		input = ""
-		fmt.Println("Heure maximum de départ (défault : 20:00)")
-		fmt.Scanln(&input)
-		if input != "" {
-			maxHour = input
-		}
-
+		minHour, maxHour = DefaultHour(input)
 		a, err := strconv.ParseFloat(HoursToDecimal(maxHour), 64)
 		Error(err)
 		b, err := strconv.ParseFloat(HoursToDecimal(minHour), 64)
@@ -103,7 +88,7 @@ func AddMoreTime(TotalHours float64, n float64, AllDays []DayTable) ([]DayTable,
 		x = n - TotalHours
 	}
 
-	if len(AllDays) == 6 {
+	if len(AllDays) == 6 && TotalHours < n {
 		fmt.Printf("Impossible d'ajouter une nouvelle journée. \nModifiez les horaires du fichier source pour ajouter %v heures.\nFermeture du programme.\n\n", x)
 		os.Exit(0)
 	}
