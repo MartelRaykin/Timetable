@@ -35,89 +35,79 @@ func AddMoreTime(TotalHours float64, n float64, AllDays []DayTable) ([]DayTable,
 		AllDays[i].Day = cases.Title(language.French, cases.Compact).String(AllDays[i].Day)
 	}
 
-	if len(AllDays) == 6 {
-		fmt.Printf("Impossible d'ajouter une nouvelle journée. \nModifiez les horaires du fichier source pour ajouter %v heures\n\n", x)
-		os.Exit(0)
-	}
+	for len(AllDays) < 6 && TotalHours < n {
+		weekdays := []string{"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"}
 
-	weekdays := []string{"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"}
-
-	existing := make(map[string]bool)
-	for _, day := range AllDays {
-		existing[day.Day] = true
-	}
-
-	for _, day := range weekdays {
-		if !existing[day] {
-			newDay = day
-			break
-		}
-	}
-
-	fmt.Printf("Ajoutez un jour supplémentaire (défault : %v)\n", newDay)
-	input := ""
-	for {
-		fmt.Scanln(&input)
-		if input == "" {
-			break
+		existing := make(map[string]bool)
+		for _, day := range AllDays {
+			existing[day.Day] = true
 		}
 
-		duplicate := false
-		for i := 0; i < len(AllDays); i++ {
-
-			if strings.EqualFold(input, AllDays[i].Day) {
-				fmt.Println("Ce jour est déjà programmé ! Veuillez saisir un autre jour :")
-				duplicate = true
-				input = ""
+		for _, day := range weekdays {
+			if !existing[day] {
+				newDay = day
 				break
 			}
 		}
-		if !duplicate {
-			newDay = input
-			break
+
+		fmt.Printf("Ajoutez un jour supplémentaire (défault : %v)\n", newDay)
+		input := ""
+		for {
+			fmt.Scanln(&input)
+			if input == "" {
+				break
+			}
+
+			duplicate := false
+			for i := 0; i < len(AllDays); i++ {
+
+				if strings.EqualFold(input, AllDays[i].Day) {
+					fmt.Println("Ce jour est déjà programmé ! Veuillez saisir un autre jour :")
+					duplicate = true
+					input = ""
+					break
+				}
+			}
+			if !duplicate {
+				newDay = input
+				break
+			}
 		}
-	}
 
-	input = ""
-	fmt.Println("Heure minimum d'arrivée (défault : 10:00)")
-	fmt.Scanln(&input)
-	if input != "" {
-		minHour = input
-	}
-
-	input = ""
-	fmt.Println("Heure maximum de départ (défault : 20:00)")
-	fmt.Scanln(&input)
-	if input != "" {
-		maxHour = input
-	}
-
-	a, err := strconv.ParseFloat(HoursToDecimal(maxHour), 64)
-	Error(err)
-	b, err := strconv.ParseFloat(HoursToDecimal(minHour), 64)
-	Error(err)
-	newHours := a - b
-	TotalHours += newHours
-
-	for TotalHours < n {
-		fmt.Printf("Pas assez d'heures disponibles. Manque : %v heures\n", x)
+		input = ""
 		fmt.Println("Heure minimum d'arrivée (défault : 10:00)")
 		fmt.Scanln(&input)
 		if input != "" {
 			minHour = input
 		}
 
+		input = ""
 		fmt.Println("Heure maximum de départ (défault : 20:00)")
 		fmt.Scanln(&input)
 		if input != "" {
 			maxHour = input
 		}
 
-	}
-	minHourDec := HoursToDecimal(minHour)
-	maxHourDec := HoursToDecimal(maxHour)
+		a, err := strconv.ParseFloat(HoursToDecimal(maxHour), 64)
+		Error(err)
+		b, err := strconv.ParseFloat(HoursToDecimal(minHour), 64)
+		Error(err)
+		newHours := a - b
+		TotalHours += newHours
 
-	AllDays = append(AllDays, DayTable{newDay, minHourDec, maxHourDec})
+		minHourDec := HoursToDecimal(minHour)
+		maxHourDec := HoursToDecimal(maxHour)
+
+		AllDays = append(AllDays, DayTable{newDay, minHourDec, maxHourDec})
+
+		x = n - TotalHours
+	}
+
+	if len(AllDays) == 6 {
+		fmt.Printf("Impossible d'ajouter une nouvelle journée. \nModifiez les horaires du fichier source pour ajouter %v heures.\nFermeture du programme.\n\n", x)
+		os.Exit(0)
+	}
+
 	return AllDays, TotalHours
 }
 
