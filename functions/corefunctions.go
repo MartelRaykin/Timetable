@@ -50,19 +50,34 @@ func CheckArgs() (float64, string, string, error) {
 
 func FinalPrint(hours string, file *os.File, n float64) {
 	s := CreateDays(file, n)
-	fmt.Printf("Temps de présence par jour pour atteindre %v :\n", hours)
+
+	outFile, err := os.Create("hourstodo.txt")
+	if err != nil {
+		Error(err)
+	}
+	defer outFile.Close()
+
+	hours = strings.TrimLeft(hours, "0")
+	hours = strings.TrimSuffix(hours, "00")
+	header := fmt.Sprintf("Temps de présence par jour pour atteindre %v :\n", hours)
+	fmt.Print(header)
+	outFile.WriteString(header)
+
 	for _, day := range s {
 		hourStr := strings.TrimLeft(day.MinHour, "0")
 		if hourStr == "" || strings.HasPrefix(hourStr, "-") {
 			hourStr = "0" + hourStr
 		}
 		hourStr = strings.Replace(hourStr, ":", "h", 1)
-		fmt.Printf("%s : %s\n", day.Day, hourStr)
+		hourStr = strings.TrimSuffix(hourStr, "00")
+		line := fmt.Sprintf("%s : %s\n", day.Day, hourStr)
+		fmt.Print(line)
+		outFile.WriteString(line)
 	}
 }
 
 func Repartition(AllDays []DayTable, _ float64, totalWork float64) []DayTable {
-	const step = 0.5
+	const step = 0.25
 	n := len(AllDays)
 	available := make([]float64, n)
 	assigned := make([]float64, n)
@@ -70,7 +85,7 @@ func Repartition(AllDays []DayTable, _ float64, totalWork float64) []DayTable {
 	for i, day := range AllDays {
 		min, _ := strconv.ParseFloat(day.MinHour, 64)
 		max, _ := strconv.ParseFloat(day.MaxHour, 64)
-		available[i] = float64(int((max-min)*2)) / 2
+		available[i] = float64(int((max-min)*4)) / 4
 	}
 	totalAssigned := 0.0
 	for totalAssigned < totalWork {
@@ -88,7 +103,7 @@ func Repartition(AllDays []DayTable, _ float64, totalWork float64) []DayTable {
 	}
 
 	for i := range AllDays {
-		AllDays[i].MinHour = fmt.Sprintf("%.1f", assigned[i])
+		AllDays[i].MinHour = fmt.Sprintf("%.2f", assigned[i])
 		AllDays[i].MaxHour = ""
 
 		AllDays[i].MinHour = DecimalToHour(AllDays[i].MinHour)

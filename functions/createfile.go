@@ -61,7 +61,6 @@ func FirstDay() string {
 		toPrint = append(toPrint, input)
 		minHour, maxHour := DefaultHour(input)
 		toPrint = append(toPrint, minHour, maxHour)
-		fmt.Println(toPrint)
 		finalFile.WriteString(toPrint[0])
 		finalFile.WriteString("\n")
 		finalFile.WriteString(toPrint[1])

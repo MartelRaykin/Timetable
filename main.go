@@ -18,7 +18,7 @@ func main() {
 		fmt.Println("Aucune liste détectée. Créer une liste ? (Oui : Création manuelle de la liste / Non : Heures par défaut)")
 		input := ""
 		fmt.Scanln(&input)
-		if input == "n" || input == "no" || input == "non" {
+		if input == "" || input == "n" || input == "no" || input == "non" {
 			thirtyfive.Default()
 			return
 		} else if input == "y" || input == "o" || input == "oui" || input == "yes" {
