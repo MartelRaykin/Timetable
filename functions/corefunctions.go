@@ -1,8 +1,11 @@
 package thirtyfive
 
 import (
+	"errors"
 	"fmt"
+	"os"
 	"strconv"
+	"strings"
 )
 
 type DayTable struct {
@@ -14,6 +17,47 @@ type DayTable struct {
 func Error(e error) {
 	if e != nil {
 		fmt.Printf("Something went wrong : %v\n", e)
+		os.Exit(1)
+	}
+}
+
+func CheckArgs() (float64, string, string, error) {
+	n := 35.0
+	hours := ""
+	var filename string
+
+	args := os.Args
+
+	if len(args) == 1 {
+		return n, hours, filename, nil
+	} else if len(args) == 3 {
+		var err error
+		filename = args[1]
+		n, err = strconv.ParseFloat(args[2], 64)
+		Error(err)
+		hours = DecimalToHour(args[2])
+		hours = strings.Replace(hours, ":", "h", 1)
+	} else if len(args) > 3 {
+		err := errors.New("too many arguments")
+		Error(err)
+	} else {
+		filename = args[1]
+		hours = "35h"
+	}
+
+	return n, hours, filename, nil
+}
+
+func FinalPrint(hours string, file *os.File, n float64) {
+	s := CreateDays(file, n)
+	fmt.Printf("Temps de présence par jour pour atteindre %v :\n", hours)
+	for _, day := range s {
+		hourStr := strings.TrimLeft(day.MinHour, "0")
+		if hourStr == "" || strings.HasPrefix(hourStr, "-") {
+			hourStr = "0" + hourStr
+		}
+		hourStr = strings.Replace(hourStr, ":", "h", 1)
+		fmt.Printf("%s : %s\n", day.Day, hourStr)
 	}
 }
 

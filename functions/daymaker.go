@@ -2,6 +2,7 @@ package thirtyfive
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 	"strings"
 )
@@ -30,16 +31,46 @@ func MakeDay(file *os.File, scanner *bufio.Scanner) (DayTable, int) {
 	return CurrentDay, row
 }
 
+func CountDays(file *os.File, scanner *bufio.Scanner) int {
+	file.Seek(0, 0)
+	totalDays := 0
+	lineCount := 0
+
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
+		if line == "" {
+			continue
+		}
+
+		lineCount++
+
+		if lineCount == 3 {
+			totalDays++
+			lineCount = 0
+		}
+	}
+
+	if lineCount != 0 {
+		fmt.Println("Invalid Day Format")
+		os.Exit(1)
+	}
+
+	return totalDays
+}
+
 func CreateDays(file *os.File, n float64) []DayTable {
 	scanner := bufio.NewScanner(file)
-	AllDays := make([]DayTable, 5)
+	totalDays := CountDays(file, scanner)
+	scanner = bufio.NewScanner(file)
+	file.Seek(0, 0)
+	AllDays := make([]DayTable, totalDays)
 	row := 0
-	for i := 0; i < 5; i++ {
+	for i := 0; i < totalDays; i++ {
 		AllDays[i], row = MakeDay(file, scanner)
 		row += 1
 	}
 
-	for i := 0; i < 5; i++ {
+	for i := 0; i < totalDays; i++ {
 		AllDays[i].MinHour = HoursToDecimal(AllDays[i].MinHour)
 		AllDays[i].MaxHour = HoursToDecimal(AllDays[i].MaxHour)
 	}

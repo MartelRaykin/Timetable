@@ -3,12 +3,17 @@ package thirtyfive
 import (
 	"fmt"
 	"os"
+	"regexp"
 	"strconv"
-	"strings"
 )
 
+func Separator() *regexp.Regexp {
+	re := regexp.MustCompile(`[:hH./]`)
+	return re
+}
+
 func HoursToDecimal(timeStr string) string {
-	parts := strings.Split(timeStr, ":")
+	parts := Separator().Split(timeStr, -1)
 	if len(parts) != 2 {
 		fmt.Println("Invalid Hour format")
 		os.Exit(1)
