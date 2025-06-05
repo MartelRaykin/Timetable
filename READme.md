@@ -21,7 +21,7 @@ Lundi - Day of the Week / Le jour de la semaine
 Next Day / Jour suivant
 ```
 - The program allows you to add Sunday manually but it will not do it automatically.
-- Le programme permet d'ajouter manuelle le dimanche comme jour de travail mais ne le fera pas automatiquement
+- Le programme permet d'ajouter manuellement le dimanche comme jour de travail mais ne le fera pas automatiquement
 - The hours can be in format 10h00, 10:00, 10H00 or 10.00. Any other format will return an error.
 - Les heures peuvent être au format 10h00, 10:00, 10H00 ou 10.00. Un autre format retournera une erreur.
 - Don't forget the empty line between days / Les jours doivent être séparés par une ligne vide
