@@ -1,5 +1,12 @@
 # How to Run / Fonctionnement
 
+## Switch to English / Lancer le programme en anglais
+- If you want to run the programme in English, you can add --en or -english as an argument anywhere in your call for the program. For example :
+- Pour lancer le programme en anglais, ajoutez --en ou -english comme argument en appelant le programme. Par exemple :
+```
+go run . timetable.txt 30 --en
+```
+
 ## Format
 The program runs with a timetable presented like this / Le programme fonctionne avec un emploi du temps présenté ainsi :
 ```
@@ -9,7 +16,8 @@ Lundi - Day of the Week / Le jour de la semaine
 
 Next Day / Jour suivant
 ```
-- For now, the program only accepts day names in French / Le programme n'accepte pour l'instant les noms des jours qu'en anglais
+- The program allows you to add Sunday manually but it will not do it automatically.
+- Le programme permet d'ajouter manuelle le dimanche comme jour de travail mais ne le fera pas automatiquement
 - The hours can be in format 10h00, 10:00, 10H00 or 10.00. Any other format will return an error.
 - Les heures peuvent être au format 10h00, 10:00, 10H00 ou 10.00. Un autre format retournera une erreur.
 - Don't forget the empty line between days / Les jours doivent être séparés par une ligne vide

@@ -21,7 +21,7 @@ func Error(e error) {
 	}
 }
 
-func CheckArgs() (float64, string, string, error) {
+func CheckArgs(english bool) (float64, string, string, error) {
 	n := 35.0
 	hours := ""
 	var filename string
@@ -36,7 +36,9 @@ func CheckArgs() (float64, string, string, error) {
 		n, err = strconv.ParseFloat(args[2], 64)
 		Error(err)
 		hours = DecimalToHour(args[2])
-		hours = strings.Replace(hours, ":", "h", 1)
+		if !english {
+			hours = strings.Replace(hours, ":", "h", 1)
+		}
 	} else if len(args) > 3 {
 		err := errors.New("too many arguments")
 		Error(err)
@@ -48,8 +50,8 @@ func CheckArgs() (float64, string, string, error) {
 	return n, hours, filename, nil
 }
 
-func FinalPrint(hours string, file *os.File, n float64) {
-	s := CreateDays(file, n)
+func FinalPrint(hours string, file *os.File, n float64, english bool) {
+	s := CreateDays(file, n, english)
 
 	outFile, err := os.Create("hourstodo.txt")
 	if err != nil {
@@ -59,7 +61,12 @@ func FinalPrint(hours string, file *os.File, n float64) {
 
 	hours = strings.TrimLeft(hours, "0")
 	hours = strings.TrimSuffix(hours, "00")
+
 	header := fmt.Sprintf("Temps de présence par jour pour atteindre %v :\n", hours)
+	if english {
+		header = fmt.Sprintf("Hours to work per day to reach %v :\n", hours)
+	}
+
 	fmt.Print(header)
 	outFile.WriteString(header)
 

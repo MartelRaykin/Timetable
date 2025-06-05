@@ -15,7 +15,7 @@ func Separator() *regexp.Regexp {
 func HoursToDecimal(timeStr string) string {
 	parts := Separator().Split(timeStr, -1)
 	if len(parts) != 2 {
-		fmt.Println("Invalid Hour format")
+		fmt.Println("Invalid Hour format / Format de l'heure invalide")
 		os.Exit(1)
 	}
 	hours, err := strconv.Atoi(parts[0])

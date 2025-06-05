@@ -51,14 +51,14 @@ func CountDays(file *os.File, scanner *bufio.Scanner) int {
 	}
 
 	if lineCount != 0 {
-		fmt.Println("Invalid Day Format")
+		fmt.Println("Invalid Day Format / Format invalide")
 		os.Exit(1)
 	}
 
 	return totalDays
 }
 
-func CreateDays(file *os.File, n float64) []DayTable {
+func CreateDays(file *os.File, n float64, english bool) []DayTable {
 	scanner := bufio.NewScanner(file)
 	totalDays := CountDays(file, scanner)
 	scanner = bufio.NewScanner(file)
@@ -74,8 +74,13 @@ func CreateDays(file *os.File, n float64) []DayTable {
 		AllDays[i].MinHour = HoursToDecimal(AllDays[i].MinHour)
 		AllDays[i].MaxHour = HoursToDecimal(AllDays[i].MaxHour)
 	}
+	maxDays := 0
+	if row/4%4 != 0 {
+		row += 1
+		maxDays = row / 4
+	}
 
-	AllDays, TotalHours := AvailabilityCheck(AllDays, n)
+	AllDays, TotalHours := AvailabilityCheck(AllDays, n, english, maxDays)
 	AllDays = Repartition(AllDays, TotalHours, n)
 	return AllDays
 }
