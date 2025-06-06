@@ -60,13 +60,14 @@ func FinalPrint(hours string, file *os.File, n float64, english bool) {
 	defer outFile.Close()
 
 	hours = strings.TrimLeft(hours, "0")
-	hours = strings.TrimSuffix(hours, "00")
 
-	header := fmt.Sprintf("Temps de présence par jour pour atteindre %v :\n", hours)
-	if english {
-		header = fmt.Sprintf("Hours to work per day to reach %v :\n", hours)
+	if !english {
+		hours = strings.TrimSuffix(hours, "00")
+		hours = strings.Replace(hours, ":", "h", 1)
 	}
 
+	phrases, _ := SwitchLanguage(english)
+	header := fmt.Sprintf("%v %v :\n", phrases[12], hours)
 	fmt.Print(header)
 	outFile.WriteString(header)
 

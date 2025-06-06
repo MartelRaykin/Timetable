@@ -10,38 +10,36 @@ import (
 	"golang.org/x/text/language"
 )
 
-func NoFile(n float64, arguments []string, english bool) (float64, []string) {
+func NoFile(n float64, arguments []string, english bool) (float64, string, []string) {
 	var err error
-	if !english {
-		fmt.Println("Aucune liste détectée. Créer une liste ? (Oui : Création manuelle de la liste / Non : Heures par défaut)")
-	} else {
-		fmt.Println("No list detected. Do you want to create a list ? (Yes : Set up the list manually / No : Default timetable)")
-	}
+	phrases, _ := SwitchLanguage(english)
+	fmt.Println(phrases[0])
+
 	input := ""
+	hours := "35"
 	fmt.Scanln(&input)
 	input = strings.ToLower(input)
 	if input == "" || input == "n" || input == "no" || input == "non" {
 		Default(english)
 	} else if input == "y" || input == "o" || input == "oui" || input == "yes" {
-		n, err = strconv.ParseFloat(FirstDay(english), 64)
+		hours = FirstDay(english)
+		n, err = strconv.ParseFloat(hours, 64)
+		hours = DecimalToHour(hours)
 		Error(err)
 		arguments = append(arguments, "timetable.txt")
 
 	}
 
-	return n, arguments
+	return n, hours, arguments
 }
 
 func DefaultHour(input string, english bool) (string, string) {
+	phrases, _ := SwitchLanguage(english)
 	minHour := "10:00"
 	maxHour := "20:00"
 
 	input = ""
-	if !english {
-		fmt.Println("Heure minimum d'arrivée (défault : 10:00)")
-	} else {
-		fmt.Println("At what time you can come in ? (default : 10:00)")
-	}
+	fmt.Println(phrases[1])
 
 	fmt.Scanln(&input)
 	if input != "" {
@@ -49,11 +47,7 @@ func DefaultHour(input string, english bool) (string, string) {
 	}
 
 	input = ""
-	if !english {
-		fmt.Println("Heure maximum de départ (défault : 20:00)")
-	} else {
-		fmt.Println("Maximum At what time do you have to leave ? (default : 20:00)")
-	}
+	fmt.Println(phrases[2])
 	fmt.Scanln(&input)
 	if input != "" {
 		maxHour = input
@@ -67,19 +61,11 @@ func FirstDay(english bool) string {
 	Error(err)
 	input := ""
 	var toPrint []string
+	phrases, weekdays := SwitchLanguage(english)
 
 	for {
-		var weekdays []string
-		if !english {
-			fmt.Println("Définir le premier jour : (défault : Lundi)")
-			input = "Lundi"
-			weekdays = []string{"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"}
-		} else {
-			fmt.Println("Set first day : (default : Monday)")
-			input = "Monday"
-			weekdays = []string{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"}
-		}
-
+		fmt.Println(phrases[3])
+		input = weekdays[0]
 		fmt.Scanln(&input)
 
 		input = cases.Title(language.French, cases.Compact).String(input)
@@ -87,11 +73,7 @@ func FirstDay(english bool) string {
 		for i := 0; i < len(weekdays); i++ {
 			if input != weekdays[i] {
 				if i == len(weekdays)-1 {
-					if !english {
-						fmt.Println("Saisie invalide")
-					} else {
-						fmt.Println("Invalid input")
-					}
+					fmt.Println(phrases[len(phrases)-2])
 					break
 				}
 				continue
@@ -115,11 +97,7 @@ func FirstDay(english bool) string {
 		break
 	}
 
-	if !english {
-		fmt.Println("Nombre d'heures à répartir (défault : 35) : ")
-	} else {
-		fmt.Println("How many hours do you have to work ? (default : 35) : ")
-	}
+	fmt.Println(phrases[4])
 	input = ""
 	fmt.Scanln(&input)
 	if input == "" {

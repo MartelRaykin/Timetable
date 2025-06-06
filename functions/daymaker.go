@@ -31,7 +31,8 @@ func MakeDay(file *os.File, scanner *bufio.Scanner) (DayTable, int) {
 	return CurrentDay, row
 }
 
-func CountDays(file *os.File, scanner *bufio.Scanner) int {
+func CountDays(file *os.File, scanner *bufio.Scanner, english bool) int {
+	phrases, _ := SwitchLanguage(english)
 	file.Seek(0, 0)
 	totalDays := 0
 	lineCount := 0
@@ -51,7 +52,7 @@ func CountDays(file *os.File, scanner *bufio.Scanner) int {
 	}
 
 	if lineCount != 0 {
-		fmt.Println("Invalid Day Format / Format invalide")
+		fmt.Println(phrases[len(phrases)-1])
 		os.Exit(1)
 	}
 
@@ -60,7 +61,7 @@ func CountDays(file *os.File, scanner *bufio.Scanner) int {
 
 func CreateDays(file *os.File, n float64, english bool) []DayTable {
 	scanner := bufio.NewScanner(file)
-	totalDays := CountDays(file, scanner)
+	totalDays := CountDays(file, scanner, english)
 	scanner = bufio.NewScanner(file)
 	file.Seek(0, 0)
 	AllDays := make([]DayTable, totalDays)
@@ -71,8 +72,8 @@ func CreateDays(file *os.File, n float64, english bool) []DayTable {
 	}
 
 	for i := 0; i < totalDays; i++ {
-		AllDays[i].MinHour = HoursToDecimal(AllDays[i].MinHour)
-		AllDays[i].MaxHour = HoursToDecimal(AllDays[i].MaxHour)
+		AllDays[i].MinHour = HoursToDecimal(AllDays[i].MinHour, english)
+		AllDays[i].MaxHour = HoursToDecimal(AllDays[i].MaxHour, english)
 	}
 	maxDays := 0
 	if row/4%4 != 0 {

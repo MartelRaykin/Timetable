@@ -15,13 +15,13 @@ func main() {
 		return
 	}
 	if filename == "" {
-		n, os.Args = thirtyfive.NoFile(n, os.Args, english)
+		n, hours, os.Args = thirtyfive.NoFile(n, os.Args, english)
 	}
 
 	// Ouverture du fichier
 	file, err := os.Open(os.Args[1])
 	if err != nil {
-		n, os.Args = thirtyfive.NoFile(n, os.Args, english)
+		n, hours, os.Args = thirtyfive.NoFile(n, os.Args, english)
 	}
 	defer file.Close()
 

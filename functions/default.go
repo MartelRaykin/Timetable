@@ -23,12 +23,3 @@ func Default(english bool) {
 	}
 	os.Exit(0)
 }
-
-func CheckEnglish(arguments []string) ([]string, bool) {
-	for i, arg := range arguments {
-		if arg == "--en" || arg == "-english" {
-			return append(arguments[:i], arguments[i+1:]...), true
-		}
-	}
-	return arguments, false
-}
