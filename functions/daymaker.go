@@ -80,8 +80,18 @@ func CreateDays(file *os.File, n float64, english bool) []DayTable {
 		row += 1
 		maxDays = row / 4
 	}
+	for i := 0; i < len(AllDays); i++ {
+		for j := i + 1; j < len(AllDays); j++ {
+			if AllDays[i].Day == AllDays[j].Day {
+				phrases, _ := SwitchLanguage(english)
+				fmt.Println(phrases[13])
+				os.Exit(0)
+			}
+		}
+	}
 
 	AllDays, TotalHours := AvailabilityCheck(AllDays, n, english, maxDays)
 	AllDays = Repartition(AllDays, TotalHours, n)
+
 	return AllDays
 }

@@ -14,9 +14,9 @@ func SwitchLanguage(english bool) ([]string, []string) {
 	var weekdays []string
 
 	if english {
-		weekdays = []string{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"}
+		weekdays = []string{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"}
 	} else {
-		weekdays = []string{"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"}
+		weekdays = []string{"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"}
 	}
 
 	if english {
@@ -33,10 +33,11 @@ func SwitchLanguage(english bool) ([]string, []string) {
 		phrases = append(phrases, "No extra day can be added. \nChange the timetable in the source file to add")
 		phrases = append(phrases, "Program closing.")
 		phrases = append(phrases, "Hours to work each day to reach")
+		phrases = append(phrases, "Invalid format : at least one day is duplicated")
 
-		phrases = append(phrases, "Invalid Hour Format")
+		phrases = append(phrases, "Invalid Hour Format. Expected : HH:MM or HHhMM")
 		phrases = append(phrases, "Invalid input")
-		phrases = append(phrases, "Invalid day structure")
+		phrases = append(phrases, "Invalid day structure : each day must be composed of three lines and separated by an empty line.")
 	} else {
 		phrases = append(phrases, "Aucune liste détectée. Créer une liste ? (Oui : Création manuelle de la liste / Non : Heures par défaut)")
 		phrases = append(phrases, "Heure minimum d'arrivée (défault : 10:00)")
@@ -51,10 +52,11 @@ func SwitchLanguage(english bool) ([]string, []string) {
 		phrases = append(phrases, "Impossible d'ajouter une nouvelle journée. \nModifiez les horaires du fichier source pour ajouter")
 		phrases = append(phrases, "Fermeture du programme.")
 		phrases = append(phrases, "Temps de présence par jour pour atteindre")
+		phrases = append(phrases, "Format invalide : au moins un jour se répète dans la liste")
 
-		phrases = append(phrases, "Format d'heure invalide")
+		phrases = append(phrases, "Format d'heure invalide. Attendu : HH:MM ou HHhMM")
 		phrases = append(phrases, "Saisie invalide")
-		phrases = append(phrases, "Format invalide")
+		phrases = append(phrases, "Format invalide : chaque journée doit compter trois lignes et être séparée par une ligne vide.")
 	}
 
 	return phrases, weekdays

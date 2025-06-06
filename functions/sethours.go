@@ -31,8 +31,8 @@ func AddMoreTime(TotalHours float64, n float64, AllDays []DayTable, english bool
 	var err error
 	if maxDays == 1 {
 		maxDays, err = strconv.Atoi(input)
+		Error(err)
 	}
-	Error(err)
 
 	newDay := weekdays[5]
 	minHour := "10:00"
@@ -67,7 +67,6 @@ func AddMoreTime(TotalHours float64, n float64, AllDays []DayTable, english bool
 
 			duplicate := false
 			for i := 0; i < len(AllDays); i++ {
-
 				if strings.EqualFold(input, AllDays[i].Day) {
 					fmt.Println(phrases[9])
 					duplicate = true
