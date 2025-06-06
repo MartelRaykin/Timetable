@@ -91,7 +91,7 @@ func CreateDays(file *os.File, n float64, english bool) []DayTable {
 	}
 
 	AllDays, TotalHours := AvailabilityCheck(AllDays, n, english, maxDays)
-	AllDays = Repartition(AllDays, TotalHours, n)
+	AllDays = Repartition(AllDays, TotalHours, n, english)
 
 	return AllDays
 }

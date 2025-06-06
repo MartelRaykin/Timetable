@@ -10,14 +10,14 @@ import (
 	"golang.org/x/text/language"
 )
 
-func HoursAvailable(AllDays []DayTable) []float64 {
+func HoursAvailable(AllDays []DayTable, english bool) []float64 {
 	var HoursPerDay []float64
 
 	for i := 0; i < len(AllDays); i++ {
 		min, err := strconv.ParseFloat(AllDays[i].MinHour, 64)
-		Error(err)
+		Error(err, english)
 		max, err := strconv.ParseFloat(AllDays[i].MaxHour, 64)
-		Error(err)
+		Error(err, english)
 		HoursPerDay = append(HoursPerDay, max-min)
 	}
 	return HoursPerDay
@@ -31,7 +31,14 @@ func AddMoreTime(TotalHours float64, n float64, AllDays []DayTable, english bool
 	var err error
 	if maxDays == 1 {
 		maxDays, err = strconv.Atoi(input)
-		Error(err)
+		Error(err, english)
+	}
+
+	for maxDays > 7 {
+		fmt.Println(phrases[len(phrases)-4])
+		fmt.Scanln(&input)
+		maxDays, err = strconv.Atoi(input)
+		Error(err, english)
 	}
 
 	newDay := weekdays[5]
@@ -57,6 +64,14 @@ func AddMoreTime(TotalHours float64, n float64, AllDays []DayTable, english bool
 			}
 		}
 
+		if newDay == weekdays[6] {
+			fmt.Println(phrases[14])
+			fmt.Scanln(&input)
+			if input == "" || input == "no" || input == "non" || input == "n" {
+				fmt.Printf("%v %v %v \n%v\n", phrases[10], x, phrases[7], phrases[11])
+				os.Exit(0)
+			}
+		}
 		fmt.Printf("%v %v)\n", phrases[8], newDay)
 		input = ""
 		for {
@@ -82,9 +97,9 @@ func AddMoreTime(TotalHours float64, n float64, AllDays []DayTable, english bool
 
 		minHour, maxHour = DefaultHour(input, english)
 		a, err := strconv.ParseFloat(HoursToDecimal(maxHour, english), 64)
-		Error(err)
+		Error(err, english)
 		b, err := strconv.ParseFloat(HoursToDecimal(minHour, english), 64)
-		Error(err)
+		Error(err, english)
 		newHours := a - b
 		TotalHours += newHours
 
@@ -97,7 +112,7 @@ func AddMoreTime(TotalHours float64, n float64, AllDays []DayTable, english bool
 	}
 
 	if len(AllDays) == maxDays && TotalHours < n {
-		fmt.Printf("%v %v %v \n%v\n\n", phrases[10], x, phrases[7], phrases[11])
+		fmt.Printf("%v %v %v \n%v\n", phrases[10], x, phrases[7], phrases[11])
 		os.Exit(0)
 	}
 
@@ -105,7 +120,7 @@ func AddMoreTime(TotalHours float64, n float64, AllDays []DayTable, english bool
 }
 
 func AvailabilityCheck(AllDays []DayTable, n float64, english bool, maxDays int) ([]DayTable, float64) {
-	HoursPerDay := HoursAvailable(AllDays)
+	HoursPerDay := HoursAvailable(AllDays, english)
 	TotalHours := 0.0
 	for i := 0; i < len(AllDays); i++ {
 		TotalHours += HoursPerDay[i]

@@ -14,9 +14,10 @@ type DayTable struct {
 	MaxHour string
 }
 
-func Error(e error) {
+func Error(e error, english bool) {
+	phrases, _ := SwitchLanguage(english)
 	if e != nil {
-		fmt.Printf("Something went wrong : %v\n", e)
+		fmt.Printf("%v %v\n", phrases[len(phrases)-5], e)
 		os.Exit(1)
 	}
 }
@@ -34,14 +35,14 @@ func CheckArgs(english bool) (float64, string, string, error) {
 		var err error
 		filename = args[1]
 		n, err = strconv.ParseFloat(args[2], 64)
-		Error(err)
-		hours = DecimalToHour(args[2])
+		Error(err, english)
+		hours = DecimalToHour(args[2], english)
 		if !english {
 			hours = strings.Replace(hours, ":", "h", 1)
 		}
 	} else if len(args) > 3 {
 		err := errors.New("too many arguments")
-		Error(err)
+		Error(err, english)
 	} else {
 		filename = args[1]
 		hours = "35h"
@@ -55,7 +56,7 @@ func FinalPrint(hours string, file *os.File, n float64, english bool) {
 
 	outFile, err := os.Create("hourstodo.txt")
 	if err != nil {
-		Error(err)
+		Error(err, english)
 	}
 	defer outFile.Close()
 
@@ -84,7 +85,7 @@ func FinalPrint(hours string, file *os.File, n float64, english bool) {
 	}
 }
 
-func Repartition(AllDays []DayTable, _ float64, totalWork float64) []DayTable {
+func Repartition(AllDays []DayTable, _ float64, totalWork float64, english bool) []DayTable {
 	const step = 0.25
 	n := len(AllDays)
 	available := make([]float64, n)
@@ -114,7 +115,7 @@ func Repartition(AllDays []DayTable, _ float64, totalWork float64) []DayTable {
 		AllDays[i].MinHour = fmt.Sprintf("%.2f", assigned[i])
 		AllDays[i].MaxHour = ""
 
-		AllDays[i].MinHour = DecimalToHour(AllDays[i].MinHour)
+		AllDays[i].MinHour = DecimalToHour(AllDays[i].MinHour, english)
 	}
 	return AllDays
 }

@@ -24,8 +24,8 @@ func NoFile(n float64, arguments []string, english bool) (float64, string, []str
 	} else if input == "y" || input == "o" || input == "oui" || input == "yes" {
 		hours = FirstDay(english)
 		n, err = strconv.ParseFloat(hours, 64)
-		hours = DecimalToHour(hours)
-		Error(err)
+		hours = DecimalToHour(hours, english)
+		Error(err, english)
 		arguments = append(arguments, "timetable.txt")
 
 	}
@@ -58,7 +58,7 @@ func DefaultHour(input string, english bool) (string, string) {
 
 func FirstDay(english bool) string {
 	finalFile, err := os.Create("./timetable.txt")
-	Error(err)
+	Error(err, english)
 	input := ""
 	var toPrint []string
 	phrases, weekdays := SwitchLanguage(english)
