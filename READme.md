@@ -1,5 +1,9 @@
 # How to Run / Fonctionnement
 
+## What is does / Fonctionnalités
+- This program allocates a certain number of hours into your workdays depending on your availability. You can either create a file containing all your available hours in the week (see below) or enter the data directly as the program runs. It is available in French and English.
+- Ce programme répartit un certain nombre d'heures dans une liste de jours en fonction des disponibilités. Il fonctionne soit avec un fichier contenant toutes les heures de disponibilité dans la semaine (voir plus bas) ou en entrant directement les données dans le programme. Il fonctionne en français et en anglais.
+
 ## Switch to English / Lancer le programme en anglais
 - If you want to run the programme in English, you can add --en or -english as an argument anywhere in your call for the program. For example :
 - Pour lancer le programme en anglais, ajoutez --en ou -english comme argument en appelant le programme. Par exemple :
@@ -17,7 +21,7 @@ Lundi - Day of the Week / Le jour de la semaine
 Next Day / Jour suivant
 ```
 - The program allows you to add Sunday manually but it will not do it automatically.
-- Le programme permet d'ajouter manuelle le dimanche comme jour de travail mais ne le fera pas automatiquement
+- Le programme permet d'ajouter manuellement le dimanche comme jour de travail mais ne le fera pas automatiquement
 - The hours can be in format 10h00, 10:00, 10H00 or 10.00. Any other format will return an error.
 - Les heures peuvent être au format 10h00, 10:00, 10H00 ou 10.00. Un autre format retournera une erreur.
 - Don't forget the empty line between days / Les jours doivent être séparés par une ligne vide
