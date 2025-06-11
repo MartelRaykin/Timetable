@@ -4,11 +4,12 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 )
 
 func MakeDay(file *os.File, scanner *bufio.Scanner) (DayTable, int) {
-	CurrentDay := DayTable{"", "", ""}
+	CurrentDay := DayTable{"", "", "", ""}
 	row := 0
 
 	for scanner.Scan() {
@@ -80,12 +81,19 @@ func CreateDays(file *os.File, n float64, english bool) []DayTable {
 		row += 1
 		maxDays = row / 4
 	}
+
+	phrases, _ := SwitchLanguage(english)
 	for i := 0; i < len(AllDays); i++ {
 		for j := i + 1; j < len(AllDays); j++ {
 			if AllDays[i].Day == AllDays[j].Day {
-				phrases, _ := SwitchLanguage(english)
 				fmt.Println(phrases[13])
-				os.Exit(0)
+				os.Exit(1)
+			}
+			min, _ := strconv.ParseFloat(AllDays[i].MinHour, 64)
+			max, _ := strconv.ParseFloat(AllDays[i].MaxHour, 64)
+			if min > max {
+				fmt.Println(phrases[len(phrases)-6])
+				os.Exit(1)
 			}
 		}
 	}

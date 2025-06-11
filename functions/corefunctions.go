@@ -12,6 +12,7 @@ type DayTable struct {
 	Day     string
 	MinHour string
 	MaxHour string
+	ToDo    string
 }
 
 func Error(e error, english bool) {
@@ -73,7 +74,7 @@ func FinalPrint(hours string, file *os.File, n float64, english bool) {
 	outFile.WriteString(header)
 
 	for _, day := range s {
-		hourStr := strings.TrimLeft(day.MinHour, "0")
+		hourStr := strings.TrimLeft(day.ToDo, "0")
 		if hourStr == "" || strings.HasPrefix(hourStr, "-") {
 			hourStr = "0" + hourStr
 		}
@@ -112,10 +113,8 @@ func Repartition(AllDays []DayTable, _ float64, totalWork float64, english bool)
 	}
 
 	for i := range AllDays {
-		AllDays[i].MinHour = fmt.Sprintf("%.2f", assigned[i])
-		AllDays[i].MaxHour = ""
-
-		AllDays[i].MinHour = DecimalToHour(AllDays[i].MinHour, english)
+		AllDays[i].ToDo = fmt.Sprintf("%.2f", assigned[i])
+		AllDays[i].ToDo = DecimalToHour(AllDays[i].ToDo, english)
 	}
 	return AllDays
 }

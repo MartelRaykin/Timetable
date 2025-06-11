@@ -36,6 +36,7 @@ func SwitchLanguage(english bool) ([]string, []string) {
 		phrases = append(phrases, "Invalid format: at least one day is duplicated")
 		phrases = append(phrases, "The only available day left is Sunday. Do you wish to add Sunday to your list of workdays?")
 
+		phrases = append(phrases, "Invalid format : minimum hour to come in must be set before hour to leave at.")
 		phrases = append(phrases, "Something went wrong:")
 		phrases = append(phrases, "Invalid: You can't work for more than 7 days in a week! Please enter a valid number of days.")
 		phrases = append(phrases, "Invalid Hour Format. Expected: HH:MM or HHhMM")
@@ -58,9 +59,10 @@ func SwitchLanguage(english bool) ([]string, []string) {
 		phrases = append(phrases, "Format invalide : au moins un jour se répète dans la liste")
 		phrases = append(phrases, "Le seul jour disponible restant est dimanche. Voulez-vous ajouter le dimanche à votre liste de jours ?")
 
+		phrases = append(phrases, "Format invalide : l'heure minimum d'arrivée doit être inférieure à l'heure maximum de départ.")
 		phrases = append(phrases, "Le programme a rencontré un problème :")
 		phrases = append(phrases, "Invalide : on ne peut pas travailler plus de 7 jours par semaine ! Saisissez un nombre de jours valide.")
-		phrases = append(phrases, "Format d'heure invalide. Attendu : HH:MM ou HHhMM")
+		phrases = append(phrases, "Format d'heure invalide. Attendu : HH:MM ou HHhMM.")
 		phrases = append(phrases, "Saisie invalide.")
 		phrases = append(phrases, "Format invalide : chaque journée doit compter trois lignes et être séparée par une ligne vide.")
 	}

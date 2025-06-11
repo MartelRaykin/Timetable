@@ -106,7 +106,7 @@ func AddMoreTime(TotalHours float64, n float64, AllDays []DayTable, english bool
 		minHourDec := HoursToDecimal(minHour, english)
 		maxHourDec := HoursToDecimal(maxHour, english)
 
-		AllDays = append(AllDays, DayTable{newDay, minHourDec, maxHourDec})
+		AllDays = append(AllDays, DayTable{newDay, minHourDec, maxHourDec, ""})
 
 		x = n - TotalHours
 	}
