@@ -74,15 +74,31 @@ func FinalPrint(hours string, file *os.File, n float64, english bool) {
 	outFile.WriteString(header)
 
 	for _, day := range s {
-		hourStr := strings.TrimLeft(day.ToDo, "0")
-		if hourStr == "" || strings.HasPrefix(hourStr, "-") {
-			hourStr = "0" + hourStr
+		if !english {
+			day.ToDo = HourFormat(day.ToDo)
 		}
-		hourStr = strings.Replace(hourStr, ":", "h", 1)
-		hourStr = strings.TrimSuffix(hourStr, "00")
-		line := fmt.Sprintf("%s : %s\n", day.Day, hourStr)
+
+		line := fmt.Sprintf("%s : %s\n", day.Day, day.ToDo)
 		fmt.Print(line)
 		outFile.WriteString(line)
+	}
+
+	fmt.Println(phrases[13])
+	outFile.WriteString(phrases[13])
+	for _, day := range s {
+		result := WorkHours(day, english)
+		day.MinHour = DecimalToHour(day.MinHour, english)
+		day.MaxHour = DecimalToHour(result, english)
+
+		line := fmt.Sprintf("%s : ", day.Day)
+		if !english {
+			day.MinHour = HourFormat(day.MinHour)
+			day.MaxHour = HourFormat(day.MaxHour)
+		}
+		line += day.MinHour
+		line += " - " + day.MaxHour
+		fmt.Println(line)
+		outFile.WriteString("\n" + line)
 	}
 }
 

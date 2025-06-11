@@ -1,5 +1,7 @@
 package thirtyfive
 
+import "strings"
+
 func CheckEnglish(arguments []string) ([]string, bool) {
 	for i, arg := range arguments {
 		if arg == "--en" || arg == "-english" {
@@ -7,6 +9,17 @@ func CheckEnglish(arguments []string) ([]string, bool) {
 		}
 	}
 	return arguments, false
+}
+
+func HourFormat(h string) string {
+	h = strings.TrimLeft(h, "0")
+	if h == "" || strings.HasPrefix(h, "-") {
+		h = "0" + h
+	}
+	h = strings.Replace(h, ":", "h", 1)
+	h = strings.TrimSuffix(h, "00")
+
+	return h
 }
 
 func SwitchLanguage(english bool) ([]string, []string) {
@@ -33,9 +46,10 @@ func SwitchLanguage(english bool) ([]string, []string) {
 		phrases = append(phrases, "No extra day can be added. \nChange the timetable in the source file to add")
 		phrases = append(phrases, "Program closing.")
 		phrases = append(phrases, "Hours to work each day to reach")
-		phrases = append(phrases, "Invalid format: at least one day is duplicated")
+		phrases = append(phrases, "\nSuggested work hours :")
 		phrases = append(phrases, "The only available day left is Sunday. Do you wish to add Sunday to your list of workdays?")
 
+		phrases = append(phrases, "Invalid format: at least one day is duplicated")
 		phrases = append(phrases, "Invalid format : minimum hour to come in must be set before hour to leave at.")
 		phrases = append(phrases, "Something went wrong:")
 		phrases = append(phrases, "Invalid: You can't work for more than 7 days in a week! Please enter a valid number of days.")
@@ -56,9 +70,10 @@ func SwitchLanguage(english bool) ([]string, []string) {
 		phrases = append(phrases, "Impossible d'ajouter une nouvelle journée. \nModifiez les horaires du fichier source pour ajouter")
 		phrases = append(phrases, "Fermeture du programme.")
 		phrases = append(phrases, "Temps de présence par jour pour atteindre")
-		phrases = append(phrases, "Format invalide : au moins un jour se répète dans la liste")
+		phrases = append(phrases, "\nHoraires suggérés :")
 		phrases = append(phrases, "Le seul jour disponible restant est dimanche. Voulez-vous ajouter le dimanche à votre liste de jours ?")
 
+		phrases = append(phrases, "Format invalide : au moins un jour se répète dans la liste")
 		phrases = append(phrases, "Format invalide : l'heure minimum d'arrivée doit être inférieure à l'heure maximum de départ.")
 		phrases = append(phrases, "Le programme a rencontré un problème :")
 		phrases = append(phrases, "Invalide : on ne peut pas travailler plus de 7 jours par semaine ! Saisissez un nombre de jours valide.")

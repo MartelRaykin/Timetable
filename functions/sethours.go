@@ -10,6 +10,16 @@ import (
 	"golang.org/x/text/language"
 )
 
+func WorkHours(day DayTable, english bool) string {
+	min, _ := strconv.ParseFloat(day.MinHour, 64)
+	day.ToDo = HoursToDecimal(day.ToDo, english)
+	max, _ := strconv.ParseFloat(day.ToDo, 64)
+	workhours := min + max
+	result := fmt.Sprintf("%.2f", workhours)
+
+	return result
+}
+
 func HoursAvailable(AllDays []DayTable, english bool) []float64 {
 	var HoursPerDay []float64
 

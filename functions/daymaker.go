@@ -86,7 +86,7 @@ func CreateDays(file *os.File, n float64, english bool) []DayTable {
 	for i := 0; i < len(AllDays); i++ {
 		for j := i + 1; j < len(AllDays); j++ {
 			if AllDays[i].Day == AllDays[j].Day {
-				fmt.Println(phrases[13])
+				fmt.Println(phrases[len(phrases)-7])
 				os.Exit(1)
 			}
 			min, _ := strconv.ParseFloat(AllDays[i].MinHour, 64)
