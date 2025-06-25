@@ -26,7 +26,7 @@
    
        <h3>Définir vos horaires de disponibilité</h3>
        <div class="daysinput"><h5><label>Premier jour : </label>
-       <select name="firstday" required data-initial-value="{{.FirstDay}}">
+      <select name="firstday" required data-initial-value="{{.FirstDay}}"></select>
        </select></h5>
 
        <label for="firstmin">Je veux commencer à...</label>
@@ -106,14 +106,14 @@
        <div id="popup"> 
         <span onclick="Popdown();">X</span>
         <input type="submit" value="Sur cette page" class="formlink" onclick="Popdown();"> 
-        <input type="submit" value="Dans un nouvel onglet" class="formlink" onclick="this.form.target='_blank'; Popdown();">
+        <input type="button" value="Dans un nouvel onglet" class="formlink" onclick="Popdown(); NewTab()">
         <input type="button" value="Dans un fichier" class="formlink" onclick="submitForDownload(); Popdown();">
        </div>
 
       
     </form>
 
-    <div>{{.FinalResult}}</div>
+  {{if .FinalResult}} <div id="displayedResult">{{.FinalResult}}</div> {{end}}
 
 
     
