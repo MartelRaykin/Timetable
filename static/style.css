@@ -1,0 +1,256 @@
+:root {
+    --font-title: "Bellefair", serif;
+    --font-common:"Roboto Condensed", sans-serif;
+
+    --color-light: #D0B8A5ff;
+    --color-black: #28231Dff;
+    --color-medium: #837364ff;
+    --color-white: #EADED2ff;
+
+    --tran-medium: rgba(131, 115, 100, 0.7);
+    --tran-light: rgba(208, 184, 165, 0.4);
+    --tran-readable: rgba(208, 184, 165, 0.7);
+}
+
+body {
+    background-image: url('logotest2.jpg');
+    background-size:cover;
+    background-position: top left;
+    background-attachment: fixed; 
+  }
+
+  @media (orientation: portrait) {
+  body {
+    background-position: top center;
+  }
+}
+
+/***************** Général ***************/
+body {
+    font-family: var(--font-common)
+}
+
+::selection {
+ background-color:var(--color-medium);
+ color: var(--color-white);
+}
+
+::-moz-selection {
+ background-color:var(--color-medium);
+ color: var(--color-white);
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: var(--color-medium);
+    border: 3px solid var(--color-black);
+    border-top:1px solid var(--color-black);
+    background-clip: content-box;   /* THIS IS IMPORTANT */
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: var(--color-light);
+    border: 2px solid transparent;
+    border-radius:2px;
+}
+
+/***************** En-tête ***************/
+header {
+  position: sticky;
+  height:50px;
+}
+
+h1.maintitle {
+    width:94%;
+    padding:10px 3%;
+    font-size:4em;
+    font-family: var(--font-title);
+    margin:initial;
+    text-align: center;
+    text-shadow: -4px 2px 2px var(--tran-medium);
+    margin-top:50px;
+}
+
+/********** Page d'accueil *********/
+
+div.readme {
+    background:var(--tran-light);
+    border-radius: 10px;
+    margin:auto;
+    width:61%;
+    padding:2%;
+    text-align: center;
+    max-height:100px;
+    overflow: auto;
+    transition:0.4s;
+}
+
+div.readme:hover {
+    max-height:300px;
+    transition:0.4s;
+}
+
+.mainlink, .sublink, .formlink {
+    display: block;
+    border-radius: 5px;
+    background-color: var(--tran-light);
+    color:black;
+    padding:10px;
+    text-align: center;
+    text-decoration: none;
+    font-variant: small-caps;
+    transition:0.4s;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.mainlink {
+    width:50%;
+    min-width:200px;
+    max-width: 350px;
+    margin:auto;
+    margin-top:20px;
+}
+
+.sublink {
+  width:auto;
+  position: fixed;
+  top: 20px;right:20px;
+}
+
+.mainlink:hover, .sublink:hover, .formlink:hover {
+    letter-spacing: 5px;
+    transition:0.4s;
+    box-shadow: -4px 2px 2px rgba(255, 255, 255, 0.442);
+}
+
+/********** Formulaire ************/
+
+form {
+    background-color: var(--tran-readable);
+    width:70%;
+    margin:auto;
+    padding:2%;
+    border-radius: 10px;
+  }
+
+.question {
+    text-align: center;
+    width: 100%;
+    max-width: 800px;
+    margin: 15px auto;
+    position: relative;
+}
+
+.question label {
+    display: block;
+}
+
+.question input  {
+    width:50%;
+    margin-top: 5px;
+}
+
+#second, #third, #fourth, #fifth, #sixth, #seventh {
+    display:none;
+}
+
+.GENtop {
+  display:flex;
+  justify-content: space-evenly;
+}
+
+form h3 {
+  text-align: center;
+  margin: 30px auto;
+  padding-top: 10px;
+  border-top : 2px dashed black;
+  width:80%;
+}
+
+.daysinput, .daysinput h5 {
+  width:90%;
+  margin:auto;
+  text-align: center;
+}
+
+.daysinput h5 {
+  font-size:19px;
+  margin:20px auto 10px auto;
+}
+
+.daysinput h5 select {
+  margin-left:10px;
+  width: 200px;
+  text-align: center;
+}
+
+.daysinput input {
+  margin: 5px;
+}
+
+.daysinput input, .daysinput select, .question input {
+  border:1px solid black;
+  background-color: var(--tran-light);
+}
+
+.daysinput input, .daysinput select {
+  padding:5px 2%;
+  width:20%;
+}
+
+.daysinput label {
+  width:250px;
+  display: inline-block;
+}
+
+option {
+  background-color: var(--color-light);
+}
+
+#popup {
+  display: none;
+  position: absolute;
+  width:380px;
+  left:50%;
+  margin-left: -200px;
+  top:30%;
+  background: var(--color-light);
+  padding:20px;
+  border-radius: 10px;
+  box-shadow: 1px 1px 14px 0px var(--tran-medium);
+}
+
+
+.formlink {
+  padding-block: initial;
+  padding-inline: initial ;
+  border:1px solid black;
+  width:340px;
+  padding:10px;
+  margin:10px auto;
+  font-family: var(--font-common);
+  font-size: initial;
+}
+
+input.formlink {
+  width:362px;
+}
+
+#popup span {
+  display: block;
+  background-color: var(--color-medium);
+  color:var(--color-white);
+  border-radius: 100%;
+  position: absolute;
+  top:-5px;
+  right:-5px;
+  cursor:pointer;
+  padding:5px 7px;
+}

@@ -23,12 +23,10 @@ func Error(e error, english bool) {
 	}
 }
 
-func CheckArgs(english bool) (float64, string, string, error) {
+func CheckArgs(args []string, english bool) (float64, string, string, error) {
 	n := 35.0
 	hours := ""
 	var filename string
-
-	args := os.Args
 
 	if len(args) == 1 {
 		return n, hours, filename, nil
@@ -52,10 +50,11 @@ func CheckArgs(english bool) (float64, string, string, error) {
 	return n, hours, filename, nil
 }
 
-func FinalPrint(hours string, file *os.File, n float64, english bool) {
+func FinalPrint(hours string, file *os.File, n float64, english bool) []string {
 	s := CreateDays(file, n, english)
+	var result []string
 
-	outFile, err := os.Create("hourstodo.txt")
+	outFile, err := os.Create("./functions/hourstodo.txt")
 	if err != nil {
 		Error(err, english)
 	}
@@ -70,7 +69,7 @@ func FinalPrint(hours string, file *os.File, n float64, english bool) {
 
 	phrases, _ := SwitchLanguage(english)
 	header := fmt.Sprintf("%v %v :\n", phrases[12], hours)
-	fmt.Print(header)
+	result = append(result, fmt.Sprint(header))
 	outFile.WriteString(header)
 
 	for _, day := range s {
@@ -79,16 +78,16 @@ func FinalPrint(hours string, file *os.File, n float64, english bool) {
 		}
 
 		line := fmt.Sprintf("%s : %s\n", day.Day, day.ToDo)
-		fmt.Print(line)
+		result = append(result, line)
 		outFile.WriteString(line)
 	}
 
-	fmt.Println(phrases[13])
+	result = append(result, fmt.Sprintln(phrases[13]))
 	outFile.WriteString(phrases[13])
 	for _, day := range s {
-		result := WorkHours(day, english)
+		score := WorkHours(day, english)
 		day.MinHour = DecimalToHour(day.MinHour, english)
-		day.MaxHour = DecimalToHour(result, english)
+		day.MaxHour = DecimalToHour(score, english)
 
 		line := fmt.Sprintf("%s : ", day.Day)
 		if !english {
@@ -97,9 +96,11 @@ func FinalPrint(hours string, file *os.File, n float64, english bool) {
 		}
 		line += day.MinHour
 		line += " - " + day.MaxHour
-		fmt.Println(line)
+		result = append(result, line)
 		outFile.WriteString("\n" + line)
 	}
+
+	return result
 }
 
 func Repartition(AllDays []DayTable, _ float64, totalWork float64, english bool) []DayTable {

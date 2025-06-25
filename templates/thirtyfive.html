@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./static/style.css">   
+<script src="./static/script.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bellefair&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
+</style>
+    <title>Générateur d'horaires</title>
+</head>
+<body><h1 class="maintitle">Composer son emploi du temps</h1>
+<header><a href="/" class="sublink">Revenir à l'accueil</a></header>
+
+    <form action="/gen" method="post" id="mainForm">
+      <div class="GENtop">
+       <div class="question"> <label for="hours">Combien d'heures devez-vous travailler cette semaine ?</label>
+         <input type="text" id="hours" name="hours" min="1" max="5" value="{{.Hours}}" placeholder='Séparer heures et minutes par ":" ou "h"' title='Séparer heures et minutes par ":" ou "h"'>
+       </div>
+
+       <div class="question"><label for="days">Sur combien de jours souhaitez-vous organiser votre emploi du temps ?</label>
+         <input type="number" id="days" name="days" min="1" max="7" required value="{{.Days}}">
+       </div>
+       </div>
+   
+       <h3>Définir vos horaires de disponibilité</h3>
+       <div class="daysinput"><h5><label>Premier jour : </label>
+       <select name="firstday" required data-initial-value="{{.FirstDay}}">
+       </select></h5>
+
+       <label for="firstmin">Je veux commencer à...</label>
+       <input type="time" step="600" step="600" name="firstmin" required value="{{.FirstMin}}"><br/>
+       <label for="firstmax">Je peux travailler jusqu'à...</label>
+       <input type="time" step="600" name="firstmax" required value="{{.FirstMax}}">
+       </div>
+
+       <div class="daysinput" id="second">
+       <h5> <label>Deuxième jour : </label>
+       <select name="secondday" data-initial-value="{{.SecondDay}}">
+       </select></h5>
+
+        <label for="secondmin">Je veux commencer à...</label>
+       <input type="time" step="600" name="secondmin" value="{{.SecondMin}}"><br/>
+       <label for="secondmax">Je peux travailler jusqu'à...</label>
+       <input type="time" step="600" name="secondmax" value="{{.SecondMax}}">
+       </div>
+
+       <div class="daysinput" id="third">
+       <h5> <label>Troisième jour : </label>
+       <select name="thirdday" data-initial-value="{{.ThirdDay}}">
+       </select></h5>
+
+        <label for="thirdmin">Je veux commencer à...</label>
+       <input type="time" step="600" name="thirdmin" value="{{.ThirdMin}}"><br/> 
+       <label for="thirdmax">Je peux travailler jusqu'à...</label>
+       <input type="time" step="600" name="thirdmax" value="{{.ThirdMax}}">
+       </div>
+
+       <div class="daysinput" id="fourth">
+       <h5> <label>Quatrième jour : </label>
+       <select name="fourthday" data-initial-value="{{.FourthDay}}">
+       </select></h5>
+
+        <label for="fourthmin">Je veux commencer à...</label>
+       <input type="time" step="600" name="fourthmin" value="{{.FourthMin}}"><br/>
+       <label for="fourthmax">Je peux travailler jusqu'à...</label>
+       <input type="time" step="600" name="fourthmax" value="{{.FourthMax}}">
+       </div>
+
+       <div class="daysinput" id="fifth">
+       <h5> <label>Cinquième jour : </label>
+       <select name="fifthday" data-initial-value="{{.FifthDay}}">
+       </select></h5>
+
+        <label for="fifthmin">Je veux commencer à...</label>
+       <input type="time" step="600" name="fifthmin" value="{{.FifthMin}}"><br/>
+       <label for="fifthmax">Je peux travailler jusqu'à...</label>
+       <input type="time" step="600" name="fifthmax" value="{{.FifthMax}}">
+       </div>
+
+       <div class="daysinput" id="sixth">
+       <h5> <label>Sixième jour : </label>
+       <select name="sixthday" data-initial-value="{{.SixthDay}}">
+       </select></h5>
+
+        <label for="sixthmin">Je veux commencer à...</label>
+       <input type="time" step="600" name="sixthmin" value="{{.SixthMin}}"><br/>
+       <label for="sixthmax">Je peux travailler jusqu'à...</label>
+       <input type="time" step="600" name="sixthmax" value="{{.SixthMax}}">
+       </div>
+
+       <div class="daysinput" id="seventh">
+       <h5> <label>Septième jour : </label>
+       <select name="seventhday" data-initial-value="{{.SeventhDay}}">
+       </select></h5>
+
+        <label for="seventhmin">Je veux commencer à...</label>
+       <input type="time" step="600" name="seventhmin" value="{{.SeventhMin}}"><br/>
+       <label for="seventhmax">Je peux travailler jusqu'à...</label>
+       <input type="time" step="600" name="seventhmax" value="{{.SeventhMax}}">
+       </div>
+
+       <a class="mainlink" onclick="Popup();" style="border:1px solid black">Générer</a>
+
+       <div id="popup"> 
+        <span onclick="Popdown();">X</span>
+        <input type="submit" value="Sur cette page" class="formlink" onclick="Popdown();"> 
+        <input type="submit" value="Dans un nouvel onglet" class="formlink" onclick="this.form.target='_blank'; Popdown();">
+        <input type="button" value="Dans un fichier" class="formlink" onclick="submitForDownload(); Popdown();">
+       </div>
+
+      
+    </form>
+
+    <div>{{.FinalResult}}</div>
+
+
+    
+</body>
+</html>

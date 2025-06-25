@@ -22,6 +22,9 @@ func HoursToDecimal(timeStr string, english bool) string {
 		fmt.Println(phrases[len(phrases)-2])
 		os.Exit(1)
 	}
+	if parts[1] == "" {
+		parts[1] = "00"
+	}
 	if strings.HasSuffix(parts[1], " PM") {
 		addon = 12
 		parts[1] = strings.TrimSuffix(parts[1], " PM")
