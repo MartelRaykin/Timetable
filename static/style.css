@@ -88,13 +88,8 @@ div.readme {
     text-align: center;
     max-height:100px;
     overflow: auto;
-    transition:0.4s;
 }
 
-div.readme:hover {
-    max-height:300px;
-    transition:0.4s;
-}
 
 .mainlink, .sublink, .formlink {
     display: block;
@@ -132,12 +127,13 @@ div.readme:hover {
 
 /********** Formulaire ************/
 
-form {
+form, #displayedResult {
     background-color: var(--tran-readable);
     width:70%;
     margin:auto;
     padding:2%;
     border-radius: 10px;
+    position: relative;
   }
 
 .question {
@@ -220,7 +216,7 @@ option {
   width:380px;
   left:50%;
   margin-left: -200px;
-  top:30%;
+  bottom:100px;
   background: var(--color-light);
   padding:20px;
   border-radius: 10px;
@@ -239,10 +235,6 @@ option {
   font-size: initial;
 }
 
-input.formlink {
-  width:362px;
-}
-
 #popup span {
   display: block;
   background-color: var(--color-medium);
@@ -253,4 +245,24 @@ input.formlink {
   right:-5px;
   cursor:pointer;
   padding:5px 7px;
+}
+
+#displayedResult {
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+#displayedResult > h2:first-child {
+  margin-top: initial;
+}
+
+#displayedResult h2 {
+  text-align: center;
+  font-family: var(--font-title);
+  font-variant: small-caps;
+  margin-bottom: 10px;
+}
+
+#displayedResult div {
+  padding-left: 20%;
 }

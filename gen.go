@@ -9,6 +9,8 @@ import (
 	"strconv"
 	"strings"
 	thirtyfive "thirty-five/functions"
+
+	"github.com/google/uuid"
 )
 
 func gen(w http.ResponseWriter, r *http.Request) {
@@ -52,6 +54,7 @@ func gen(w http.ResponseWriter, r *http.Request) {
 			SeventhMin:  r.FormValue("seventhmin"),
 			SeventhMax:  r.FormValue("seventhmax"),
 			FinalResult: finalResult,
+			AllDays:     []string{"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"},
 		}
 	}
 
@@ -70,11 +73,15 @@ func TimeTable(w http.ResponseWriter, r *http.Request) (template.HTML, string, e
 		return "", "", fmt.Errorf("invalid number of days provided")
 	}
 
-	timetable, err := os.Create("./functions/timetable.txt")
+	uniqueID := uuid.New().String()
+	tempFilePath := fmt.Sprintf("./functions/timetable_%s.txt", uniqueID)
+
+	timetable, err := os.Create(tempFilePath)
 	if err != nil {
 		http.Error(w, "Failed to create timetable file.", http.StatusInternalServerError)
 		return "", "", err // Return error to the caller
 	}
+	defer timetable.Close() // Assure que le fichier est fermé, même en cas d'erreur
 
 	dayNameMap := map[int]string{
 		1: "first",
@@ -107,17 +114,40 @@ func TimeTable(w http.ResponseWriter, r *http.Request) (template.HTML, string, e
 			return "", "", err // Return error to the caller
 		}
 	}
-	timetable.Close() // Ensure all data is flushed before reading
-	result := thirtyfive.Generating("./functions/timetable.txt", r.FormValue("hours"))
 
-	fileContentBytes, err := os.ReadFile("./functions/hourstodo.txt")
+	timetable.Close() // Ensure all data is flushed before reading
+	result, output, invalid := thirtyfive.Generating(tempFilePath, r.FormValue("hours"), r.FormValue("days"))
+
+	if result == nil {
+		http.Error(w, "File was not created properly.", http.StatusInternalServerError)
+	}
+
+	defer func() {
+		if err := os.Remove(tempFilePath); err != nil && !os.IsNotExist(err) {
+			log.Printf("Failed to delete temporary file %s: %v", tempFilePath, err)
+		}
+	}()
+	defer func() {
+		if err := os.Remove(output); err != nil && !os.IsNotExist(err) {
+			log.Printf("Failed to delete temporary file %s: %v", output, err)
+		}
+	}()
+
+	fileContentBytes, err := os.ReadFile(output)
 	if err != nil {
 		log.Printf("Error reading generated file: %v", err)
 		return "", "", fmt.Errorf("failed to read generated file")
 	}
 	fileContent := string(fileContentBytes)
 
-	FinalResult := HTMLPrinter(result, n)
+	var FinalResult template.HTML
+
+	if invalid != "" {
+		invalid = "<center>" + invalid + "</center>"
+		FinalResult = template.HTML(invalid)
+	} else {
+		FinalResult = HTMLPrinter(result, n)
+	}
 
 	return FinalResult, fileContent, nil // Return nil for error if successful
 }
@@ -147,16 +177,4 @@ func HTMLPrinter(result []string, n int) template.HTML {
 	FinalResult := template.HTML(firstPart) + template.HTML(days) + template.HTML(secondPart) + template.HTML(workHours)
 
 	return FinalResult
-}
-
-func MakeFile(w http.ResponseWriter, r *http.Request, fileContent string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.Header().Set("Content-Disposition", `attachment; filename="hourstodo.txt"`)
-
-	w.Header().Set("Content-Length", strconv.Itoa(len(fileContent)))
-
-	_, err := w.Write([]byte(fileContent))
-	if err != nil {
-		log.Printf("Error writing file content to response: %v", err)
-	}
 }

@@ -6,6 +6,8 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/google/uuid"
 )
 
 type DayTable struct {
@@ -50,16 +52,28 @@ func CheckArgs(args []string, english bool) (float64, string, string, error) {
 	return n, hours, filename, nil
 }
 
-func FinalPrint(hours string, file *os.File, n float64, english bool) []string {
-	s := CreateDays(file, n, english)
+func FinalPrint(hours string, file *os.File, n float64, english bool, days string) ([]string, string, string) {
+	totalDays, _ := strconv.Atoi(days)
+	phrases, _ := SwitchLanguage(english)
+	s, x := CreateDays(file, n, english, totalDays)
 	var result []string
 
-	outFile, err := os.Create("./functions/hourstodo.txt")
+	uniqueID := uuid.New().String()
+	tempOutput := fmt.Sprintf("./functions/hourstodo_%s.txt", uniqueID)
+
+	outFile, err := os.Create(tempOutput)
 	if err != nil {
 		Error(err, english)
 	}
 	defer outFile.Close()
 
+	var invalid string
+
+	if x != 0 {
+		invalid = fmt.Sprintf("%v %v %v\n\n", phrases[6], x, phrases[7])
+	}
+
+	hours = DecimalToHour(hours, english)
 	hours = strings.TrimLeft(hours, "0")
 
 	if !english {
@@ -67,7 +81,6 @@ func FinalPrint(hours string, file *os.File, n float64, english bool) []string {
 		hours = strings.Replace(hours, ":", "h", 1)
 	}
 
-	phrases, _ := SwitchLanguage(english)
 	header := fmt.Sprintf("%v %v :\n", phrases[12], hours)
 	result = append(result, fmt.Sprint(header))
 	outFile.WriteString(header)
@@ -100,7 +113,7 @@ func FinalPrint(hours string, file *os.File, n float64, english bool) []string {
 		outFile.WriteString("\n" + line)
 	}
 
-	return result
+	return result, tempOutput, invalid
 }
 
 func Repartition(AllDays []DayTable, _ float64, totalWork float64, english bool) []DayTable {

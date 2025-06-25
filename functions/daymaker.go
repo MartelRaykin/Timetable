@@ -32,38 +32,8 @@ func MakeDay(file *os.File, scanner *bufio.Scanner) (DayTable, int) {
 	return CurrentDay, row
 }
 
-func CountDays(file *os.File, scanner *bufio.Scanner, english bool) int {
-	phrases, _ := SwitchLanguage(english)
-	file.Seek(0, 0)
-	totalDays := 0
-	lineCount := 0
-
-	for scanner.Scan() {
-		line := strings.TrimSpace(scanner.Text())
-		if line == "" {
-			continue
-		}
-
-		lineCount++
-
-		if lineCount == 3 {
-			totalDays++
-			lineCount = 0
-		}
-	}
-
-	if lineCount != 0 {
-		fmt.Println(phrases[len(phrases)-1])
-		os.Exit(1)
-	}
-
-	return totalDays
-}
-
-func CreateDays(file *os.File, n float64, english bool) []DayTable {
+func CreateDays(file *os.File, n float64, english bool, totalDays int) ([]DayTable, int) {
 	scanner := bufio.NewScanner(file)
-	totalDays := CountDays(file, scanner, english)
-	scanner = bufio.NewScanner(file)
 	file.Seek(0, 0)
 	AllDays := make([]DayTable, totalDays)
 	row := 0
@@ -98,8 +68,12 @@ func CreateDays(file *os.File, n float64, english bool) []DayTable {
 		}
 	}
 
-	AllDays, TotalHours := AvailabilityCheck(AllDays, n, english, maxDays)
-	AllDays = Repartition(AllDays, TotalHours, n, english)
+	AllDays, TotalHours, missingHours := AvailabilityCheck(AllDays, n, english, maxDays)
 
-	return AllDays
+	if missingHours == 0 {
+		AllDays = Repartition(AllDays, TotalHours, n, english)
+		return AllDays, 0
+	} else {
+		return nil, missingHours
+	}
 }

@@ -1,5 +1,5 @@
-Temps de présence par jour pour atteindre 2h :
-Lundi : 2h
+Temps de présence par jour pour atteindre 1h :
+Lundi : 1h
 
 Horaires suggérés :
-Lundi : 13h - 15h
+Lundi : 13h - 14h

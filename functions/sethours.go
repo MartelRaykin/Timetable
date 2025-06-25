@@ -2,12 +2,7 @@ package thirtyfive
 
 import (
 	"fmt"
-	"os"
 	"strconv"
-	"strings"
-
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 )
 
 func WorkHours(day DayTable, english bool) string {
@@ -33,103 +28,7 @@ func HoursAvailable(AllDays []DayTable, english bool) []float64 {
 	return HoursPerDay
 }
 
-func AddMoreTime(TotalHours float64, n float64, AllDays []DayTable, english bool, maxDays int) ([]DayTable, float64) {
-	input := "6"
-	phrases, weekdays := SwitchLanguage(english)
-	fmt.Println(phrases[5])
-	fmt.Scanln(&input)
-	var err error
-	if maxDays == 1 {
-		maxDays, err = strconv.Atoi(input)
-		Error(err, english)
-	}
-
-	for maxDays > 7 {
-		fmt.Println(phrases[len(phrases)-4])
-		fmt.Scanln(&input)
-		maxDays, err = strconv.Atoi(input)
-		Error(err, english)
-	}
-
-	newDay := weekdays[5]
-	minHour := "10:00"
-	maxHour := "20:00"
-	x := n - TotalHours
-
-	for i := 0; i < len(AllDays); i++ {
-		AllDays[i].Day = cases.Title(language.French, cases.Compact).String(AllDays[i].Day)
-	}
-
-	for len(AllDays) < maxDays && TotalHours < n {
-		fmt.Printf("%v %v %v\n\n", phrases[6], x, phrases[7])
-		existing := make(map[string]bool)
-		for _, day := range AllDays {
-			existing[day.Day] = true
-		}
-
-		for _, day := range weekdays {
-			if !existing[day] {
-				newDay = day
-				break
-			}
-		}
-
-		if newDay == weekdays[6] {
-			fmt.Println(phrases[14])
-			fmt.Scanln(&input)
-			if input == "" || input == "no" || input == "non" || input == "n" {
-				fmt.Printf("%v %v %v \n%v\n", phrases[10], x, phrases[7], phrases[11])
-				os.Exit(0)
-			}
-		}
-		fmt.Printf("%v %v)\n", phrases[8], newDay)
-		input = ""
-		for {
-			fmt.Scanln(&input)
-			if input == "" {
-				break
-			}
-
-			duplicate := false
-			for i := 0; i < len(AllDays); i++ {
-				if strings.EqualFold(input, AllDays[i].Day) {
-					fmt.Println(phrases[9])
-					duplicate = true
-					input = ""
-					break
-				}
-			}
-			if !duplicate {
-				newDay = input
-				break
-			}
-		}
-
-		minHour, maxHour = DefaultHour(input, english)
-		a, err := strconv.ParseFloat(HoursToDecimal(maxHour, english), 64)
-		Error(err, english)
-		b, err := strconv.ParseFloat(HoursToDecimal(minHour, english), 64)
-		Error(err, english)
-		newHours := a - b
-		TotalHours += newHours
-
-		minHourDec := HoursToDecimal(minHour, english)
-		maxHourDec := HoursToDecimal(maxHour, english)
-
-		AllDays = append(AllDays, DayTable{newDay, minHourDec, maxHourDec, ""})
-
-		x = n - TotalHours
-	}
-
-	if len(AllDays) == maxDays && TotalHours < n {
-		fmt.Printf("%v %v %v \n%v\n", phrases[10], x, phrases[7], phrases[11])
-		os.Exit(0)
-	}
-
-	return AllDays, TotalHours
-}
-
-func AvailabilityCheck(AllDays []DayTable, n float64, english bool, maxDays int) ([]DayTable, float64) {
+func AvailabilityCheck(AllDays []DayTable, n float64, english bool, maxDays int) ([]DayTable, float64, int) {
 	HoursPerDay := HoursAvailable(AllDays, english)
 	TotalHours := 0.0
 	for i := 0; i < len(AllDays); i++ {
@@ -137,8 +36,10 @@ func AvailabilityCheck(AllDays []DayTable, n float64, english bool, maxDays int)
 	}
 
 	if TotalHours < n {
-		AllDays, TotalHours = AddMoreTime(TotalHours, n, AllDays, english, maxDays)
+		missingHours := n - TotalHours
+
+		return nil, 0.0, int(missingHours)
 	}
 
-	return AllDays, TotalHours
+	return AllDays, TotalHours, 0
 }

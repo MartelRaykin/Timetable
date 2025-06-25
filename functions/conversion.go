@@ -3,7 +3,6 @@ package thirtyfive
 import (
 	"errors"
 	"fmt"
-	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -18,12 +17,10 @@ func HoursToDecimal(timeStr string, english bool) string {
 	phrases, _ := SwitchLanguage(english)
 	parts := Separator().Split(timeStr, -1)
 	addon := 0
-	if len(parts) != 2 {
-		fmt.Println(phrases[len(phrases)-2])
-		os.Exit(1)
-	}
-	if parts[1] == "" {
+	if len(parts) == 2 && parts[1] == "" {
 		parts[1] = "00"
+	} else {
+		parts = append(parts, "00")
 	}
 	if strings.HasSuffix(parts[1], " PM") {
 		addon = 12

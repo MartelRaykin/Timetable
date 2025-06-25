@@ -32,25 +32,7 @@ type FormData struct {
 	SeventhMin  string
 	SeventhMax  string
 	FinalResult template.HTML
-}
-
-func handleDownload(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
-	// 2. Generate content: Call TimeTable to get the file content
-	_, fileContent, err := TimeTable(w, r) // TimeTable now returns (template.HTML, string, error)
-	if err != nil {
-		log.Printf("Error generating file content for download: %v", err)
-		// We're already in a handler, so we can send an HTTP error directly
-		http.Error(w, "Internal Server Error: Failed to generate file content.", http.StatusInternalServerError)
-		return
-	}
-
-	// 3. Initiate download: Use MakeFile to send the content as a download
-	MakeFile(w, r, fileContent)
+	AllDays     []string
 }
 
 func main() {
@@ -64,7 +46,24 @@ func main() {
 	mux.HandleFunc("/gen", gen) // This will now handle both GET and POST
 	mux.HandleFunc("/error", errorHandler)
 	mux.HandleFunc("/download", handleDownload)
+	mux.HandleFunc("/result", handleResult)
 
 	err := http.ListenAndServe(":3030", mux) // Choix du port
 	log.Fatal(err)
 }
+
+func errorHandler(w http.ResponseWriter, r *http.Request) {
+	ts, err := template.ParseFiles("./templates/error.html")
+	if err != nil {
+		log.Print(err.Error())
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	err = ts.Execute(w, ErrorString)
+	if err != nil {
+		log.Print(err.Error())
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+	}
+}
+
+var ErrorString string
