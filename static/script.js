@@ -10,7 +10,6 @@ let daySelects = []; // This needs to be 'let' because it's assigned inside init
 // --- Helper functions ---
 
 // This function updates all the dropdowns
-// MOVED OUTSIDE of initializeFormLogic
 function updateDayOptions() {
     console.log("DEBUG: --- updateDayOptions() called ---");
     const selectedDays = new Set();

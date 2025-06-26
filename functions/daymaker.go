@@ -52,6 +52,10 @@ func CreateDays(file *os.File, n float64, english bool, totalDays int) ([]DayTab
 		maxDays = row / 4
 	}
 
+	if len(AllDays) == 0 {
+		return nil, int(n)
+	}
+
 	phrases, _ := SwitchLanguage(english)
 	for i := 0; i < len(AllDays); i++ {
 		for j := i + 1; j < len(AllDays); j++ {

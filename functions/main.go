@@ -9,11 +9,21 @@ import (
 func Generating(filename string, hours string, days string) ([]string, string, string) {
 	var english bool
 	os.Args, english = CheckEnglish(os.Args)
+
+	if hours == "" {
+		hours = "35"
+	}
+
+	if days == "" {
+		days = "5"
+	}
+
 	hours = HoursToDecimal(hours, english)
 	n, err := strconv.ParseFloat(hours, 64)
 	if err != nil {
 		fmt.Println(err)
-		os.Exit(1)
+		invalid := "Erreur dans le formulaire. Vérifiez les champs et réessayez."
+		return nil, "", invalid
 	}
 
 	// Ouverture du fichier

@@ -66,11 +66,12 @@ func gen(w http.ResponseWriter, r *http.Request) {
 }
 
 func TimeTable(w http.ResponseWriter, r *http.Request) (template.HTML, string, error) {
+	var english bool
 	n, err := strconv.Atoi(r.FormValue("days"))
 	if err != nil {
 		// Handle the case where "days" is not a valid number, e.g., empty string on initial GET
 		log.Printf("Error converting 'days' to int: %v", err)
-		return "", "", fmt.Errorf("invalid number of days provided")
+		return "", thirtyfive.Default(english), nil
 	}
 
 	uniqueID := uuid.New().String()
@@ -78,8 +79,7 @@ func TimeTable(w http.ResponseWriter, r *http.Request) (template.HTML, string, e
 
 	timetable, err := os.Create(tempFilePath)
 	if err != nil {
-		http.Error(w, "Failed to create timetable file.", http.StatusInternalServerError)
-		return "", "", err // Return error to the caller
+		return "", thirtyfive.Default(english), nil
 	}
 	defer timetable.Close() // Assure que le fichier est fermé, même en cas d'erreur
 
