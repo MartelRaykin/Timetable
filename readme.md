@@ -1,5 +1,6 @@
 Ce programme ouvre un site web à partir duquel vous pouvez créer un emploi du temps personnalisé en fonction de vos horaires de disponibilité et de votre nombre d'heures de travail à faire.
-English is not available yet but will be in the future.
+
+[English is not available yet but will be in the future.]
 
 ## Pour lancer le site web
 
