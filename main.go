@@ -4,6 +4,8 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"os/exec"
+	"time"
 )
 
 type FormData struct {
@@ -38,6 +40,13 @@ type FormData struct {
 func main() {
 	mux := http.NewServeMux()
 	log.Print("listening on: 3030")
+	go func() {
+		time.Sleep(500 * time.Millisecond) // Wait for 500 milliseconds
+		err := exec.Command("xdg-open", "http://localhost:3030").Run()
+		if err != nil {
+			log.Printf("Error opening browser: %v", err)
+		}
+	}()
 
 	fileServer := http.FileServer(http.Dir("./static")) // Distribution css
 	mux.Handle("GET /static/", http.StripPrefix("/static", fileServer))

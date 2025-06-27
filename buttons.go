@@ -17,6 +17,8 @@ func handleDownload(w http.ResponseWriter, r *http.Request) {
 	_, fileContent, err := TimeTable(w, r) // TimeTable now returns (template.HTML, string, error)
 	if err != nil {
 		log.Printf("Error generating file content for download: %v", err)
+		// We're already in a handler, so we can send an HTTP error directly
+		http.Error(w, "Bad Request: Download file could not be", http.StatusBadRequest)
 		return
 	}
 
