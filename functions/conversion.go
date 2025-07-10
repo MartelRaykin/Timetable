@@ -17,17 +17,18 @@ func HoursToDecimal(timeStr string, english bool) string {
 	phrases, _ := SwitchLanguage(english)
 	parts := Separator().Split(timeStr, -1)
 	addon := 0
+
+	if len(parts) == 2 && parts[1] == "" {
+		parts[1] = "00"
+	} else if len(parts) == 1 {
+		parts = append(parts, "00")
+	}
 	if strings.HasSuffix(parts[1], " PM") {
 		addon = 12
 		parts[1] = strings.TrimSuffix(parts[1], " PM")
 	} else if strings.HasSuffix(parts[1], " AM") {
 		parts[1] = strings.TrimSuffix(parts[1], " AM")
 		addon -= 12
-	}
-	if len(parts) == 2 && parts[1] == "" {
-		parts[1] = "00"
-	} else {
-		parts = append(parts, "00")
 	}
 
 	hours, err := strconv.Atoi(parts[0])
